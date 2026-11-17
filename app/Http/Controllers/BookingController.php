@@ -15,10 +15,11 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request): JsonResponse
     {
         try {
-            // IMMEDIATE transactions acquire the SQLite writer lock before reading.
-            // Waiting writers re-read the slot after the previous transaction commits.
+            // Acquire the SQLite writer lock before reading to avoid a deferred
+            // transaction read-to-write upgrade (PHP 8.3 ignores transaction_mode).
             $booking = DB::transaction(function () use ($request) {
                 $data = $request->validated();
+                DB::update('UPDATE slots SET id = id WHERE id = ?', [$data['slot_id']]);
                 $slot = Slot::find($data['slot_id']);
                 abort_if(! $slot || $slot->starts_at->lessThanOrEqualTo(now('UTC')), 409, 'Slot has already started.');
 

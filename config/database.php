@@ -41,7 +41,7 @@ return [
             'busy_timeout' => 5000,
             'journal_mode' => null,
             'synchronous' => null,
-            'transaction_mode' => 'IMMEDIATE',
+            'transaction_mode' => 'DEFERRED',
         ],
 
         'mysql' => [
