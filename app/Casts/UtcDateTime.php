@@ -15,6 +15,6 @@ class UtcDateTime implements CastsAttributes
 
     public function set(Model $model, string $key, mixed $value, array $attributes): ?string
     {
-        return $value === null ? null : CarbonImmutable::parse($value)->utc()->format('Y-m-d H:i:s');
+        return $value === null ? null : CarbonImmutable::parse($value, 'UTC')->utc()->format('Y-m-d H:i:s');
     }
 }
